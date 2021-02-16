@@ -1,0 +1,63 @@
+# action.yml
+# docker push if formed as so:
+# DOCKER_REGISTRY_URL/OWNER/REPOSITORY/IMAGE_NAME:VERSION
+# ex:
+# docker.pkg.github.com/papango/docker-builder/db:1.0.0
+name: 'Build and Publish Dockerfile'
+description: 'simple build an publish of Dockerfile'
+author: 'Eric Ramahatra'
+branding: 
+  icon: anchor
+  color: orange
+inputs:
+  docker_registry_url:
+    description: 'the url your registry is located at, used for docker login, ex: docker.pkg.github.com'
+    required: true
+    default: 'docker.io'
+  docker_registry_owner: 
+    description: 'the owner for the registry, ex: papango'
+    required: true
+    default: 'papango'
+  docker_repository:
+    description: 'repository of the image,'
+    required: true
+    default: ''
+  docker_image:
+    description: 'image name to use'
+    required: true
+    default: ''
+  docker_username:
+    description: 'username needed to login to your registry'
+    required: true
+  docker_password:
+    description: 'password needed to login to your registry'
+    required: true
+  dockerfile:
+    description: 'the location of your dockerfile'
+    default: 'Dockerfile'
+    required: true
+  docker_image_tag:
+    description: 'the tag version you would like to use'
+    default: 'latest'
+    required: true
+  dockerhub:
+    description: 'push to dockerhub'
+    default: 'true'
+    required: true
+
+outputs:
+  imageinfo: 
+    description: 'the image created and pushed'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.docker_registry_url }}
+    - ${{ inputs.docker_registry_owner }}
+    - ${{ inputs.docker_repository }}
+    - ${{ inputs.docker_image }}
+    - ${{ inputs.docker_username }}
+    - ${{ inputs.docker_password }}
+    - ${{ inputs.dockerfile }}
+    - ${{ inputs.docker_image_tag }}
+    - ${{ inputs.dockerhub }}
